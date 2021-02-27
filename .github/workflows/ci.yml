@@ -15,8 +15,8 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  lint:
-    name: "Lint"
+  build:
+    name: "Build, Lint"
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
@@ -37,3 +37,9 @@ jobs:
         with:
           cmd: build
           source: src
+
+      - name: XPI artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: target.xpi
+          path: ${{ steps.web-ext-build.outputs.target }}
