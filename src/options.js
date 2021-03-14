@@ -4,7 +4,11 @@ const sb = document.querySelector('#list');
 const namefield = document.querySelector('#name');
 const error = document.querySelector('#error');
 
+console.log('options.js');
+
 btnAdd.onclick = (e) => {
+    console.log('btnAdd');
+
     e.preventDefault();
 
     let creatorId = trimCreatorId(namefield.value);
@@ -38,6 +42,9 @@ function trimCreatorId(creatorId) {
 }
 
 function createContextMenues(creatorIds) {
+
+    console.log('createContextMenues');
+
     chrome.contextMenus.removeAll();
     if (creatorIds.length < 1) {
         return
@@ -76,6 +83,45 @@ function createContextMenues(creatorIds) {
             chrome.contextMenus.create({
                 title: creatorId,
                 id: creatorId,
+                parentId: parentId,
+                contexts: ['link']
+            });
+        });
+    }
+
+    parentId += "2";
+
+    chrome.contextMenus.create({
+        title: 'Copy text + link address with CreatorID',
+        id: parentId,
+        targetUrlPatterns: [
+            "https://social.technet.microsoft.com/*",
+            "https://docs.microsoft.com/*",
+            "https://azure.microsoft.com/*",
+            "https://techcommunity.microsoft.com/*",
+            "https://social.msdn.microsoft.com/*",
+            "https://devblogs.microsoft.com/*",
+            "https://developer.microsoft.com/*",
+            "https://channel9.msdn.com/*",
+            "https://gallery.technet.microsoft.com/*",
+            "https://cloudblogs.microsoft.com/*",
+            "https://technet.microsoft.com/*",
+            "https://docs.azure.cn/*",
+            "https://www.azure.cn/*",
+            "https://msdn.microsoft.com/*",
+            "https://blogs.msdn.microsoft.com/*",
+            "https://blogs.technet.microsoft.com/*",
+            "https://microsoft.com/handsonlabs/*"
+        ],
+        contexts: ['link']
+    });
+
+    if (creatorIds.length > 1) {
+        creatorIds.forEach(function (creatorId) {
+            console.log("creator", creatorId)
+            chrome.contextMenus.create({
+                title: creatorId,
+                id: creatorId + "+text",
                 parentId: parentId,
                 contexts: ['link']
             });
